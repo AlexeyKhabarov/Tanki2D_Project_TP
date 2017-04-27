@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/alexey/Documents/Park.Mail/PREP/Tanki2D_Project_TP/client/sfml_test.cpp
+SFML/Graphics.hpp
+-
+

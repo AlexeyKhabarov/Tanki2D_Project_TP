@@ -6,7 +6,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(500, 500), "SFML tank!");
     
     sf::Image tank;
-    tank.loadFromFile("image/tank_top.png");
+    tank.loadFromFile("../image/tank_top.png");
 
     sf::Texture texture;
     texture.loadFromImage(tank);
