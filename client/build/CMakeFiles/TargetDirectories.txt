@@ -1,3 +1,0 @@
-/home/alexey/Documents/Park.Mail/PREP/Tanki2D_Project_TP/client/build/CMakeFiles/edit_cache.dir
-/home/alexey/Documents/Park.Mail/PREP/Tanki2D_Project_TP/client/build/CMakeFiles/rebuild_cache.dir
-/home/alexey/Documents/Park.Mail/PREP/Tanki2D_Project_TP/client/build/CMakeFiles/binary.dir
