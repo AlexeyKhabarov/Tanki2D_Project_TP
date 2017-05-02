@@ -1,6 +1,5 @@
 #!bin/bash
 
-mkdir build && cd $_
-cmake..
+cd build/
 make
 ./binary
