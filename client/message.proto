@@ -1,0 +1,18 @@
+syntax = "proto2";
+message Player {
+	optional string name = 1;
+	optional int32 hp = 2;
+	optional float x = 3;
+	optional float y = 4;
+	optional int32 state = 5;
+	enum Dir {
+		UP 		= 0;
+		DOWN 	= 1;
+		LEFT 	= 2;
+		RIGHT 	= 3;
+	}
+
+	optional Dir dir = 6; 
+	optional float t1 = 7;
+	optional float t2 = 8;
+}

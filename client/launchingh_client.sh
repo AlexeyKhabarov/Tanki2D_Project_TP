@@ -2,4 +2,4 @@
 
 cd build/
 make
-./binary
+./client

@@ -1,15 +1,25 @@
-cmake_minimum_required (VERSION 2.8)
-project(server)
+PROJECT(server)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.5)
 
-set(SOURCES server.cpp)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -g -O2")
+SET(CMAKE_CXX_FLAGS "-g -O2 -std=c++11")
+ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} server.cpp)
 
-add_executable(binary ${SOURCES})
+INCLUDE(FindProtobuf)
+FIND_PACKAGE(Protobuf REQUIRED)
 
-set(CMAKE_MODULE_PATH  "/usr/share/SFML/cmake/Modules"})
-find_package(SFML 2 REQUIRED graphics window system network)
+INCLUDE_DIRECTORIES(${PROTOBUF_INCLUDE_DIR})
+INCLUDE_DIRECTORIES("../client/")
+
+PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER ../client/message.proto)
+ADD_LIBRARY(proto ${PROTO_HEADER} ${PROTO_SRC})
+
+SET(CMAKE_MODULE_PATH  "/usr/share/SFML/cmake/Modules")
+FIND_PACKAGE(SFML 2 REQUIRED graphics window system network)
+
 if(SFML_FOUND)
-  include_directories(${SFML_INCLUDE_DIR})
-  target_link_libraries(binary ${SFML_LIBRARIES})
+  INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})
+  TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${SFML_LIBRARIES} proto ${PROTOBUF_LIBRARY})
 endif()
+

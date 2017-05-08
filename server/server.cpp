@@ -1,7 +1,10 @@
 #include <iostream>
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
+#include "../client/message.pb.h"
 
+
+using namespace google::protobuf;
 
 typedef struct{
     float X;
@@ -21,58 +24,107 @@ public:
 
 int main(int argc, char* argv[])
 {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
-    sf::TcpSocket client_socket, server_socket;
-    
-    sf::TcpListener listener;
+
     int key;
-    const float move = 1;
+    const float move = 0.5;
     const float X_player_start = 200;
     const float Y_player_start = 200;
     const int hp = 100;
-    Tank player = Tank(hp, X_player_start, Y_player_start);
 
     sf::Packet in_packet;
     sf::Packet out_packet;
-    listener.listen(2001);
-    listener.accept(client_socket);
 
-    std::string client_ip;
+    sf::TcpListener listener;
 
+    // bind the listener to a port
+    if (listener.listen(2000) != sf::Socket::Done)
+    {
+        // error...
+    }
+
+    // accept a new connection
+    sf::TcpSocket socket;
+    if (listener.accept(socket) != sf::Socket::Done)
+    {
+        // error...
+    } else {
+        std::cout << "First player is connected" << std::endl;
+    }
+    
+    Tank player = Tank(hp, X_player_start, Y_player_start);
+    
+    player.point.X = X_player_start;
+    player.point.Y = Y_player_start;
+    player.HP = hp;
+
+    std::string buffer = "";
+    Player message_packet;
+    
+    message_packet.set_x(player.point.X);
+    message_packet.set_y(player.point.Y);
+    message_packet.set_hp(player.HP);
+
+    if (message_packet.SerializeToString(&buffer)){
+        out_packet << buffer;
+        socket.send(out_packet);
+    }
+    out_packet.clear();
     while (true){
-        client_socket.receive(in_packet);
+        
+        socket.receive(in_packet);
+        in_packet >> buffer;
+        std::cout << "receive in_packet" << std::endl;
 
-        if (in_packet >> key){
-            switch (key)
+        if (message_packet.ParseFromString(buffer)) {
+
+            switch (message_packet.dir())
             {
-                case sf::Keyboard::Up:
+                case 0:
                     std::cout << "Up" << std::endl;
-                    player.point.Y -= move;
+                    if (message_packet.state() == 1) {
+                        player.point.Y -= move;
+                    }
+                    message_packet.set_y(player.point.Y);
                     break;
-                case sf::Keyboard::Down:
+                case 1:
                     std::cout << "Down" << std::endl;
-                    player.point.Y += move;
+                    if (message_packet.state() == 1) {
+                        player.point.Y += move;
+                    }
+                    message_packet.set_y(player.point.Y);
                     break;
-                case sf::Keyboard::Left:
+                case 2:
                     std::cout << "Left" << std::endl;
-                    player.point.X -= move;
+                    if (message_packet.state() == 1) {
+                        player.point.X -= move;
+                    }
+                    message_packet.set_x(player.point.X);
                     break;
-                case sf::Keyboard::Right:
+                case 3:
                     std::cout << "Right" << std::endl;
-                    player.point.X += move;
-                    break;
-                default:         
-                    client_ip = client_socket.getRemoteAddress().toString();
-                    server_socket.connect(client_ip, 2000);
+                    if (message_packet.state() == 1) {
+                        player.point.X += move;
+                    }
+                    message_packet.set_x(player.point.X);
                     break;
             }
-            
-            out_packet << player.point.X << player.point.Y << player.HP;
-            server_socket.send(out_packet);
 
-            out_packet.clear();
-            in_packet.clear();
         }
+        buffer = "";
+
+        message_packet.set_hp(player.HP);
+
+        if (message_packet.SerializeToString(&buffer)){
+            out_packet << buffer;
+            socket.send(out_packet);
+            std::cout << "send out_packet" << std::endl;
+        }
+        
+        out_packet.clear();
+        in_packet.clear();
     }
 
     return 0;
