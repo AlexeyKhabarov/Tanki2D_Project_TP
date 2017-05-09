@@ -2,11 +2,12 @@
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
 #include "../client/message.pb.h"
-
+#include "../client/map.h"
 
 using namespace google::protobuf;
 
-typedef struct{
+
+typedef struct {
     float X;
     float Y;
 } Point;
@@ -21,7 +22,7 @@ public:
         point.Y = y;
     }
 };
-
+void interactionWithMap(const Player& message_packet, Tank& player); //обработка столкновений
 int main(int argc, char* argv[])
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
 
     int key;
-    const float move = 0.5;
+    const float move = 1;
     const float X_player_start = 200;
     const float Y_player_start = 200;
     const int hp = 100;
@@ -130,3 +131,23 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+void interactionWithMap(const Player& message_packet, Tank& player) {
+    for (int i = player.point.Y / 32; i < (player.point.Y + message_packet.size_y()) / 32; i++) {
+        for (int j = player.point.X / 32; j < (player.point.X + message_packet.size_x()) / 32; j++) {
+            if (TileMap[i][j] == 's') {
+                if (message_packet.dir() == 1) {
+                    player.point.Y = i * 32 - message_packet.size_y();
+                }
+                if (message_packet.dir() == 0) {
+                    player.point.Y = i * 32 + 32;
+                }
+                if (message_packet.dir() == 3) {
+                    player.point.X = j * 32 - message_packet.size_x();
+                }
+                if (message_packet.dir() == 2){
+                    player.point.X = j * 32 + 32;
+                }
+            }
+        }
+    }
+}

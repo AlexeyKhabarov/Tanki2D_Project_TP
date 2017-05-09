@@ -238,6 +238,20 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   float t2() const;
   void set_t2(float value);
 
+  // optional float size_x = 9;
+  bool has_size_x() const;
+  void clear_size_x();
+  static const int kSizeXFieldNumber = 9;
+  float size_x() const;
+  void set_size_x(float value);
+
+  // optional float size_y = 10;
+  bool has_size_y() const;
+  void clear_size_y();
+  static const int kSizeYFieldNumber = 10;
+  float size_y() const;
+  void set_size_y(float value);
+
   // @@protoc_insertion_point(class_scope:Player)
  private:
   void set_has_name();
@@ -256,6 +270,10 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_t1();
   void set_has_t2();
   void clear_has_t2();
+  void set_has_size_x();
+  void clear_has_size_x();
+  void set_has_size_y();
+  void clear_has_size_y();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -268,6 +286,8 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   int dir_;
   float t1_;
   float t2_;
+  float size_x_;
+  float size_y_;
   friend struct protobuf_message_2eproto::TableStruct;
 };
 // ===================================================================
@@ -508,6 +528,54 @@ inline void Player::set_t2(float value) {
   set_has_t2();
   t2_ = value;
   // @@protoc_insertion_point(field_set:Player.t2)
+}
+
+// optional float size_x = 9;
+inline bool Player::has_size_x() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void Player::set_has_size_x() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void Player::clear_has_size_x() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void Player::clear_size_x() {
+  size_x_ = 0;
+  clear_has_size_x();
+}
+inline float Player::size_x() const {
+  // @@protoc_insertion_point(field_get:Player.size_x)
+  return size_x_;
+}
+inline void Player::set_size_x(float value) {
+  set_has_size_x();
+  size_x_ = value;
+  // @@protoc_insertion_point(field_set:Player.size_x)
+}
+
+// optional float size_y = 10;
+inline bool Player::has_size_y() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Player::set_has_size_y() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Player::clear_has_size_y() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Player::clear_size_y() {
+  size_y_ = 0;
+  clear_has_size_y();
+}
+inline float Player::size_y() const {
+  // @@protoc_insertion_point(field_get:Player.size_y)
+  return size_y_;
+}
+inline void Player::set_size_y(float value) {
+  set_has_size_y();
+  size_y_ = value;
+  // @@protoc_insertion_point(field_set:Player.size_y)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

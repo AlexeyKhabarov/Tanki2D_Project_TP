@@ -3,7 +3,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 #include "message.pb.h"
-
+#include "map.h"
 
 using namespace google::protobuf;
 
@@ -17,7 +17,9 @@ class Bullet {
     float speed;
     int direction;
     bool life;
-    sf::Image image;
+    sf::Image image_bullet;
+    sf::Texture texture_bullet;
+    sf::Sprite sprite_bullet;
 
     Bullet(float x, float y, int dir): direction(dir) {
         point.X = x;
@@ -51,6 +53,25 @@ class Bullet {
     }
 };
 
+class Map {
+public:
+    sf::Image image_grass;
+    sf::Image image_stone;
+    sf::Texture texture_grass;
+    sf::Texture texture_stone;
+    sf::Sprite sprite_grass;
+    sf::Sprite sprite_stone;
+    Map() {
+        image_grass.loadFromFile("../image/grass_32.png");
+        texture_grass.loadFromImage(image_grass);
+        sprite_grass.setTexture(texture_grass);
+
+        image_stone.loadFromFile("../image/stone_32.png");
+        texture_stone.loadFromImage(image_stone);
+        sprite_stone.setTexture(texture_stone);
+    }
+};
+
 class Tank {
 public:
     int HP;
@@ -60,6 +81,8 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
     std::string name;
+    float size_x;
+    float size_y;
     Tank(int health, float x, float y, sf::Color color): HP(health) {
         point.X = x;
         point.Y = y;
@@ -67,6 +90,8 @@ public:
         texture.loadFromImage(image); 
         sprite.setTexture(texture);
         sf::FloatRect spriteSize = sprite.getLocalBounds();
+        size_x = spriteSize.width;
+        size_y = spriteSize.height;
         sprite.setOrigin(spriteSize.width/2.0, spriteSize.height - spriteSize.width/2.0);
         sprite.setScale(0.2,0.2);
         sprite.setPosition(point.X, point.Y);
@@ -98,7 +123,7 @@ int main(int argc, char* argv[]){
     sf::RenderWindow window(sf::VideoMode(640, 480), "Tanks SFML");
 
     Tank player = Tank(0, 0, 0, sf::Color::Red);
-
+    Map map;
     // Flags for key pressed
     bool upFlag = false;
     bool downFlag = false;
@@ -197,6 +222,8 @@ int main(int argc, char* argv[]){
         }
 
 		buffer = "";
+		message_packet.set_size_x(player.size_x);
+		message_packet.set_size_y(player.size_y);
     	if (message_packet.SerializeToString(&buffer)){
     		out_packet << buffer;
     		socket.send(out_packet);
@@ -225,6 +252,25 @@ int main(int argc, char* argv[]){
         //     }
         // }
         window.clear();
+
+        for (int i = 0; i < HEIGHT_MAP; i++)
+		for (int j = 0; j < WIDTH_MAP; j++)
+		{
+			if ((TileMap[i][j] == '0')) {
+
+				map.sprite_grass.setPosition(j * 32, i * 32);
+				window.draw(map.sprite_grass);
+			}
+			if ((TileMap[i][j] == 's')) {
+
+				map.sprite_grass.setPosition(j * 32, i * 32);
+				map.sprite_stone.setPosition(j * 32, i * 32);
+				window.draw(map.sprite_grass);
+				window.draw(map.sprite_stone);
+			}			
+
+		}
+
         window.draw(player.sprite);
         window.display();
     } 
