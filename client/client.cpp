@@ -24,32 +24,13 @@ class Bullet {
     Bullet(float x, float y, int dir): direction(dir) {
         point.X = x;
         point.Y = y;
-        // image.loadFromFile("../image/tank_top.png"); 
-        // image.createMaskFromColor(sd::Color(0, 0, 0));
-        // sf::Texture.loadFromImage(image); 
-        // sf::Sprite.setTexture(texture);
-        // sf::FloatRect spriteSize = sprite.getLocalBounds();
+        image_bullet.loadFromFile("../image/bullet_16.png"); 
+        texture_bullet.loadFromImage(image_bullet); 
+        sprite_bullet.setTexture(texture_bullet);
+        sf::FloatRect spriteSize = sprite_bullet.getLocalBounds();
+        sprite_bullet.setOrigin(spriteSize.width/2.0, spriteSize.height - spriteSize.width/2.0);
+        sprite_bullet.setPosition(point.X, point.Y);
         life = true;
-    }
-    void update(float time)
-    {
-        // switch (direction)
-
-        // {
-        //     case 0: dx = -speed; dy = 0;   break;
-        //     case 1: dx = speed; dy = 0;   break;
-        //     case 2: dx = 0; dy = -speed;   break;
-        //     case 3: dx = 0; dy = speed;   break;
-        // }
-
-        // point.X += dx*time;
-        // point.Y += dy*time;
-        // if (getRect().intersects(obj[i].rect)) //если этот объект столкнулся с пулей,
-        // {
-        //     life = false;// то пуля умирает
-        // }
-
-        // sprite.setPosition(x+spriteSize.width/2.0, y+spriteSize.height/2.0);
     }
 };
 
@@ -75,7 +56,7 @@ public:
 class Tank {
 public:
     int HP;
-    int dir;   //направление движения 1 - верх, 2 - вниз, 3 - влево, 4 - вправо
+    int dir;   //направление движения 0 - верх, 1 - вниз, 2 - влево, 3 - вправо
     Point point;
     sf::Image image;
     sf::Texture texture;
@@ -93,7 +74,7 @@ public:
         size_x = spriteSize.width;
         size_y = spriteSize.height;
         sprite.setOrigin(spriteSize.width/2.0, spriteSize.height - spriteSize.width/2.0);
-        sprite.setScale(0.2,0.2);
+        sprite.setScale(0.2, 0.2);
         sprite.setPosition(point.X, point.Y);
     }
     void update() {
@@ -132,6 +113,9 @@ int main(int argc, char* argv[]){
     
     std::string buffer = "";
     Player message_packet;
+
+    message_packet.set_size_x(player.size_x);
+	message_packet.set_size_y(player.size_y);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -222,8 +206,7 @@ int main(int argc, char* argv[]){
         }
 
 		buffer = "";
-		message_packet.set_size_x(player.size_x);
-		message_packet.set_size_y(player.size_y);
+
     	if (message_packet.SerializeToString(&buffer)){
     		out_packet << buffer;
     		socket.send(out_packet);

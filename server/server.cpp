@@ -86,28 +86,48 @@ int main(int argc, char* argv[])
                 case 0:
                     std::cout << "Up" << std::endl;
                     if (message_packet.state() == 1) {
-                        player.point.Y -= move;
+                        if ((TileMap[static_cast<int>((player.point.Y - message_packet.size_y()-32)/32)][static_cast<int>(player.point.X/32)] == 's') && (message_packet.dir() == 0)) {
+                            std::cout << "stone" << std::endl;
+                            player.point.Y += 0.5;
+                        } else {
+                            player.point.Y -= move;
+                        }
                     }
                     message_packet.set_y(player.point.Y);
                     break;
                 case 1:
                     std::cout << "Down" << std::endl;
                     if (message_packet.state() == 1) {
-                        player.point.Y += move;
+                        if ((TileMap[static_cast<int>((player.point.Y + message_packet.size_y()+32)/32)][static_cast<int>(player.point.X/32)] == 's') && (message_packet.dir() == 1)) {
+                            std::cout << "stone" << std::endl;
+                            player.point.Y -= 0.5;
+                        } else {
+                            player.point.Y += move;
+                        }
                     }
                     message_packet.set_y(player.point.Y);
                     break;
                 case 2:
                     std::cout << "Left" << std::endl;
                     if (message_packet.state() == 1) {
-                        player.point.X -= move;
+                        if ((TileMap[static_cast<int>(player.point.Y/32)][static_cast<int>((player.point.X - message_packet.size_x()-32)/32)] == 's') && (message_packet.dir() == 2)) {
+                            std::cout << "stone" << std::endl;
+                            player.point.X += 0.5;
+                        } else {
+                            player.point.X -= move;
+                        }
                     }
                     message_packet.set_x(player.point.X);
                     break;
                 case 3:
                     std::cout << "Right" << std::endl;
                     if (message_packet.state() == 1) {
-                        player.point.X += move;
+                        if ((TileMap[static_cast<int>(player.point.Y/32)][static_cast<int>((player.point.X + message_packet.size_x()+32)/32)] == 's') && (message_packet.dir() == 3)) {
+                            std::cout << "stone" << std::endl;
+                            player.point.X -= 0.5;
+                        } else {
+                            player.point.X += move;
+                        }
                     }
                     message_packet.set_x(player.point.X);
                     break;
@@ -132,8 +152,8 @@ int main(int argc, char* argv[])
 }
 
 void interactionWithMap(const Player& message_packet, Tank& player) {
-    for (int i = player.point.Y / 32; i < (player.point.Y + message_packet.size_y()) / 32; i++) {
-        for (int j = player.point.X / 32; j < (player.point.X + message_packet.size_x()) / 32; j++) {
+    for (int i = (player.point.Y - message_packet.size_y()) / 32; i <= (player.point.Y + message_packet.size_y()) / 32; i++) {
+        for (int j = (player.point.X - message_packet.size_x()) / 32; j <= (player.point.X + message_packet.size_x()) / 32; j++) {
             if (TileMap[i][j] == 's') {
                 if (message_packet.dir() == 1) {
                     player.point.Y = i * 32 - message_packet.size_y();
