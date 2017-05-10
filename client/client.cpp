@@ -13,6 +13,7 @@ typedef struct {
 } Point;
 
 class Bullet {
+public:
     Point point;
     float speed;
     int direction;
@@ -20,16 +21,28 @@ class Bullet {
     sf::Image image_bullet;
     sf::Texture texture_bullet;
     sf::Sprite sprite_bullet;
-
-    Bullet(float x, float y, int dir): direction(dir) {
-        point.X = x;
-        point.Y = y;
+    float size_x;
+    float size_y;
+    Bullet(){
+        speed = 3;
         image_bullet.loadFromFile("../image/bullet_16.png"); 
         texture_bullet.loadFromImage(image_bullet); 
         sprite_bullet.setTexture(texture_bullet);
         sf::FloatRect spriteSize = sprite_bullet.getLocalBounds();
         sprite_bullet.setOrigin(spriteSize.width/2.0, spriteSize.height - spriteSize.width/2.0);
         sprite_bullet.setPosition(point.X, point.Y);
+        sprite_bullet.setScale(0.5, 0.5);
+        life = true;    	
+    }
+    Bullet(float x, float y, int dir):direction(dir) {
+        speed = 3;
+        image_bullet.loadFromFile("../image/bullet_16.png"); 
+        texture_bullet.loadFromImage(image_bullet); 
+        sprite_bullet.setTexture(texture_bullet);
+        sf::FloatRect spriteSize = sprite_bullet.getLocalBounds();
+        sprite_bullet.setOrigin(spriteSize.width/2.0, spriteSize.height - spriteSize.width/2.0);
+        sprite_bullet.setPosition(point.X, point.Y);
+        sprite_bullet.setScale(0.5, 0.5);
         life = true;
     }
 };
@@ -77,9 +90,6 @@ public:
         sprite.setScale(0.2, 0.2);
         sprite.setPosition(point.X, point.Y);
     }
-    void update() {
-
-    }
 };
 
 
@@ -113,7 +123,7 @@ int main(int argc, char* argv[]){
     
     std::string buffer = "";
     Player message_packet;
-
+	Bullet bullet;
     message_packet.set_size_x(player.size_x);
 	message_packet.set_size_y(player.size_y);
 
@@ -128,6 +138,7 @@ int main(int argc, char* argv[]){
 
         if (message_packet.ParseFromString(buffer)) {
         	player.sprite.setPosition(message_packet.x(), message_packet.y());
+        	bullet.sprite_bullet.setPosition(message_packet.bullet_x(), message_packet.bullet_y());
         	std::cout << "receive ParseFromString" << std::endl;
         }
         std::cout << "***" << std::endl;
@@ -174,9 +185,10 @@ int main(int argc, char* argv[]){
             			}	 
                         break;
                     case sf::Keyboard::Space :
-                    	
+                    	message_packet.set_bullet_life(true);
+                    	message_packet.set_bullet_x(message_packet.x());
+                    	message_packet.set_bullet_y(message_packet.y());
                     	break;    
-                    default : break;
                 }
                 
             }
@@ -206,7 +218,6 @@ int main(int argc, char* argv[]){
         }
 
 		buffer = "";
-
     	if (message_packet.SerializeToString(&buffer)){
     		out_packet << buffer;
     		socket.send(out_packet);
@@ -236,6 +247,7 @@ int main(int argc, char* argv[]){
         // }
         window.clear();
 
+
         for (int i = 0; i < HEIGHT_MAP; i++)
 		for (int j = 0; j < WIDTH_MAP; j++)
 		{
@@ -254,6 +266,7 @@ int main(int argc, char* argv[]){
 
 		}
 
+        window.draw(bullet.sprite_bullet);
         window.draw(player.sprite);
         window.display();
     } 

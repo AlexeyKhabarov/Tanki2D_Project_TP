@@ -12,6 +12,17 @@ typedef struct {
     float Y;
 } Point;
 
+class Bullet {
+public:
+    Point point;
+    float speed;
+    int direction;
+    bool life;
+    Bullet() {
+        speed = 3;
+    }
+};
+
 class Tank{
 public:
     int HP;
@@ -34,6 +45,7 @@ int main(int argc, char* argv[])
     const float X_player_start = 200;
     const float Y_player_start = 200;
     const int hp = 100;
+    bool bullet_flag = true;
 
     sf::Packet in_packet;
     sf::Packet out_packet;
@@ -73,6 +85,10 @@ int main(int argc, char* argv[])
         socket.send(out_packet);
     }
     out_packet.clear();
+
+    Bullet bullet;
+    bullet.point.Y = player.point.Y;
+    bullet.point.X = player.point.X;
     while (true){
         
         socket.receive(in_packet);
@@ -130,10 +146,33 @@ int main(int argc, char* argv[])
                         }
                     }
                     message_packet.set_x(player.point.X);
+
                     break;
             }
-
-        }
+            if (message_packet.bullet_life()) {
+                bullet.direction = message_packet.dir();
+                if (bullet_flag) {
+                    bullet.point.X = player.point.X;
+                    bullet.point.Y = player.point.Y;
+                    bullet_flag = false;
+                } else {    
+                    if (bullet.direction == 0) {
+                        bullet.point.Y -= bullet.speed;
+                    }
+                    if (bullet.direction == 1) {
+                        bullet.point.Y += bullet.speed;
+                    }
+                    if (bullet.direction == 2) {
+                        bullet.point.X -= bullet.speed;
+                    }
+                    if (bullet.direction == 3){
+                        bullet.point.X += bullet.speed;
+                    }
+                }
+                message_packet.set_bullet_x(bullet.point.X);
+                message_packet.set_bullet_y(bullet.point.Y);
+            }  
+        } 
         buffer = "";
 
         message_packet.set_hp(player.HP);

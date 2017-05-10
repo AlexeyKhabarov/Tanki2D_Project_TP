@@ -17,4 +17,8 @@ message Player {
 	optional float t2 = 8;
 	optional float size_x = 9;
 	optional float size_y = 10;
+	optional float bullet_x = 11;
+	optional float bullet_y = 12;
+	optional bool bullet_life = 13;
+	optional int32 bullet_dir = 14;
 }

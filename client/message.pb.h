@@ -252,6 +252,34 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   float size_y() const;
   void set_size_y(float value);
 
+  // optional float bullet_x = 11;
+  bool has_bullet_x() const;
+  void clear_bullet_x();
+  static const int kBulletXFieldNumber = 11;
+  float bullet_x() const;
+  void set_bullet_x(float value);
+
+  // optional float bullet_y = 12;
+  bool has_bullet_y() const;
+  void clear_bullet_y();
+  static const int kBulletYFieldNumber = 12;
+  float bullet_y() const;
+  void set_bullet_y(float value);
+
+  // optional bool bullet_life = 13;
+  bool has_bullet_life() const;
+  void clear_bullet_life();
+  static const int kBulletLifeFieldNumber = 13;
+  bool bullet_life() const;
+  void set_bullet_life(bool value);
+
+  // optional int32 bullet_dir = 14;
+  bool has_bullet_dir() const;
+  void clear_bullet_dir();
+  static const int kBulletDirFieldNumber = 14;
+  ::google::protobuf::int32 bullet_dir() const;
+  void set_bullet_dir(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:Player)
  private:
   void set_has_name();
@@ -274,6 +302,14 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void clear_has_size_x();
   void set_has_size_y();
   void clear_has_size_y();
+  void set_has_bullet_x();
+  void clear_has_bullet_x();
+  void set_has_bullet_y();
+  void clear_has_bullet_y();
+  void set_has_bullet_life();
+  void clear_has_bullet_life();
+  void set_has_bullet_dir();
+  void clear_has_bullet_dir();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
@@ -288,6 +324,10 @@ class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   float t2_;
   float size_x_;
   float size_y_;
+  float bullet_x_;
+  float bullet_y_;
+  bool bullet_life_;
+  ::google::protobuf::int32 bullet_dir_;
   friend struct protobuf_message_2eproto::TableStruct;
 };
 // ===================================================================
@@ -576,6 +616,102 @@ inline void Player::set_size_y(float value) {
   set_has_size_y();
   size_y_ = value;
   // @@protoc_insertion_point(field_set:Player.size_y)
+}
+
+// optional float bullet_x = 11;
+inline bool Player::has_bullet_x() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void Player::set_has_bullet_x() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void Player::clear_has_bullet_x() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void Player::clear_bullet_x() {
+  bullet_x_ = 0;
+  clear_has_bullet_x();
+}
+inline float Player::bullet_x() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_x)
+  return bullet_x_;
+}
+inline void Player::set_bullet_x(float value) {
+  set_has_bullet_x();
+  bullet_x_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_x)
+}
+
+// optional float bullet_y = 12;
+inline bool Player::has_bullet_y() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void Player::set_has_bullet_y() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void Player::clear_has_bullet_y() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void Player::clear_bullet_y() {
+  bullet_y_ = 0;
+  clear_has_bullet_y();
+}
+inline float Player::bullet_y() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_y)
+  return bullet_y_;
+}
+inline void Player::set_bullet_y(float value) {
+  set_has_bullet_y();
+  bullet_y_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_y)
+}
+
+// optional bool bullet_life = 13;
+inline bool Player::has_bullet_life() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void Player::set_has_bullet_life() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void Player::clear_has_bullet_life() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void Player::clear_bullet_life() {
+  bullet_life_ = false;
+  clear_has_bullet_life();
+}
+inline bool Player::bullet_life() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_life)
+  return bullet_life_;
+}
+inline void Player::set_bullet_life(bool value) {
+  set_has_bullet_life();
+  bullet_life_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_life)
+}
+
+// optional int32 bullet_dir = 14;
+inline bool Player::has_bullet_dir() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void Player::set_has_bullet_dir() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void Player::clear_has_bullet_dir() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void Player::clear_bullet_dir() {
+  bullet_dir_ = 0;
+  clear_has_bullet_dir();
+}
+inline ::google::protobuf::int32 Player::bullet_dir() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_dir)
+  return bullet_dir_;
+}
+inline void Player::set_bullet_dir(::google::protobuf::int32 value) {
+  set_has_bullet_dir();
+  bullet_dir_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_dir)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

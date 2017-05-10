@@ -59,6 +59,10 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, t2_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, size_x_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, size_y_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, bullet_x_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, bullet_y_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, bullet_life_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Player, bullet_dir_),
   0,
   1,
   2,
@@ -69,10 +73,14 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   7,
   8,
   9,
+  10,
+  11,
+  12,
+  13,
 };
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
-  { 0, 15, sizeof(Player)},
+  { 0, 19, sizeof(Player)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -121,15 +129,17 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
-      "\n\rmessage.proto\"\307\001\n\006Player\022\014\n\004name\030\001 \001(\t"
+      "\n\rmessage.proto\"\224\002\n\006Player\022\014\n\004name\030\001 \001(\t"
       "\022\n\n\002hp\030\002 \001(\005\022\t\n\001x\030\003 \001(\002\022\t\n\001y\030\004 \001(\002\022\r\n\005st"
       "ate\030\005 \001(\005\022\030\n\003dir\030\006 \001(\0162\013.Player.Dir\022\n\n\002t"
       "1\030\007 \001(\002\022\n\n\002t2\030\010 \001(\002\022\016\n\006size_x\030\t \001(\002\022\016\n\006s"
-      "ize_y\030\n \001(\002\",\n\003Dir\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004"
-      "LEFT\020\002\022\t\n\005RIGHT\020\003"
+      "ize_y\030\n \001(\002\022\020\n\010bullet_x\030\013 \001(\002\022\020\n\010bullet_"
+      "y\030\014 \001(\002\022\023\n\013bullet_life\030\r \001(\010\022\022\n\nbullet_d"
+      "ir\030\016 \001(\005\",\n\003Dir\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEF"
+      "T\020\002\022\t\n\005RIGHT\020\003"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 217);
+      descriptor, 294);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -187,6 +197,10 @@ const int Player::kT1FieldNumber;
 const int Player::kT2FieldNumber;
 const int Player::kSizeXFieldNumber;
 const int Player::kSizeYFieldNumber;
+const int Player::kBulletXFieldNumber;
+const int Player::kBulletYFieldNumber;
+const int Player::kBulletLifeFieldNumber;
+const int Player::kBulletDirFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Player::Player()
@@ -208,16 +222,16 @@ Player::Player(const Player& from)
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
   ::memcpy(&hp_, &from.hp_,
-    reinterpret_cast<char*>(&size_y_) -
-    reinterpret_cast<char*>(&hp_) + sizeof(size_y_));
+    reinterpret_cast<char*>(&bullet_dir_) -
+    reinterpret_cast<char*>(&hp_) + sizeof(bullet_dir_));
   // @@protoc_insertion_point(copy_constructor:Player)
 }
 
 void Player::SharedCtor() {
   _cached_size_ = 0;
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&hp_, 0, reinterpret_cast<char*>(&size_y_) -
-    reinterpret_cast<char*>(&hp_) + sizeof(size_y_));
+  ::memset(&hp_, 0, reinterpret_cast<char*>(&bullet_dir_) -
+    reinterpret_cast<char*>(&hp_) + sizeof(bullet_dir_));
 }
 
 Player::~Player() {
@@ -262,9 +276,9 @@ void Player::Clear() {
     ::memset(&hp_, 0, reinterpret_cast<char*>(&t2_) -
       reinterpret_cast<char*>(&hp_) + sizeof(t2_));
   }
-  if (_has_bits_[8 / 32] & 768u) {
-    ::memset(&size_x_, 0, reinterpret_cast<char*>(&size_y_) -
-      reinterpret_cast<char*>(&size_x_) + sizeof(size_y_));
+  if (_has_bits_[8 / 32] & 16128u) {
+    ::memset(&size_x_, 0, reinterpret_cast<char*>(&bullet_dir_) -
+      reinterpret_cast<char*>(&size_x_) + sizeof(bullet_dir_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -427,6 +441,62 @@ bool Player::MergePartialFromCodedStream(
         break;
       }
 
+      // optional float bullet_x = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(93u)) {
+          set_has_bullet_x();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &bullet_x_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional float bullet_y = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(101u)) {
+          set_has_bullet_y();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &bullet_y_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool bullet_life = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u)) {
+          set_has_bullet_life();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &bullet_life_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional int32 bullet_dir = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u)) {
+          set_has_bullet_dir();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &bullet_dir_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0 ||
@@ -512,6 +582,26 @@ void Player::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(10, this->size_y(), output);
   }
 
+  // optional float bullet_x = 11;
+  if (cached_has_bits & 0x00000400u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(11, this->bullet_x(), output);
+  }
+
+  // optional float bullet_y = 12;
+  if (cached_has_bits & 0x00000800u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(12, this->bullet_y(), output);
+  }
+
+  // optional bool bullet_life = 13;
+  if (cached_has_bits & 0x00001000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->bullet_life(), output);
+  }
+
+  // optional int32 bullet_dir = 14;
+  if (cached_has_bits & 0x00002000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(14, this->bullet_dir(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -583,6 +673,26 @@ void Player::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(10, this->size_y(), target);
   }
 
+  // optional float bullet_x = 11;
+  if (cached_has_bits & 0x00000400u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(11, this->bullet_x(), target);
+  }
+
+  // optional float bullet_y = 12;
+  if (cached_has_bits & 0x00000800u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(12, this->bullet_y(), target);
+  }
+
+  // optional bool bullet_life = 13;
+  if (cached_has_bits & 0x00001000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(13, this->bullet_life(), target);
+  }
+
+  // optional int32 bullet_dir = 14;
+  if (cached_has_bits & 0x00002000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(14, this->bullet_dir(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -649,7 +759,7 @@ size_t Player::ByteSizeLong() const {
     }
 
   }
-  if (_has_bits_[8 / 32] & 768u) {
+  if (_has_bits_[8 / 32] & 16128u) {
     // optional float size_x = 9;
     if (has_size_x()) {
       total_size += 1 + 4;
@@ -658,6 +768,28 @@ size_t Player::ByteSizeLong() const {
     // optional float size_y = 10;
     if (has_size_y()) {
       total_size += 1 + 4;
+    }
+
+    // optional float bullet_x = 11;
+    if (has_bullet_x()) {
+      total_size += 1 + 4;
+    }
+
+    // optional float bullet_y = 12;
+    if (has_bullet_y()) {
+      total_size += 1 + 4;
+    }
+
+    // optional bool bullet_life = 13;
+    if (has_bullet_life()) {
+      total_size += 1 + 1;
+    }
+
+    // optional int32 bullet_dir = 14;
+    if (has_bullet_dir()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->bullet_dir());
     }
 
   }
@@ -719,12 +851,24 @@ void Player::MergeFrom(const Player& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 768u) {
+  if (cached_has_bits & 16128u) {
     if (cached_has_bits & 0x00000100u) {
       size_x_ = from.size_x_;
     }
     if (cached_has_bits & 0x00000200u) {
       size_y_ = from.size_y_;
+    }
+    if (cached_has_bits & 0x00000400u) {
+      bullet_x_ = from.bullet_x_;
+    }
+    if (cached_has_bits & 0x00000800u) {
+      bullet_y_ = from.bullet_y_;
+    }
+    if (cached_has_bits & 0x00001000u) {
+      bullet_life_ = from.bullet_life_;
+    }
+    if (cached_has_bits & 0x00002000u) {
+      bullet_dir_ = from.bullet_dir_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -763,6 +907,10 @@ void Player::InternalSwap(Player* other) {
   std::swap(t2_, other->t2_);
   std::swap(size_x_, other->size_x_);
   std::swap(size_y_, other->size_y_);
+  std::swap(bullet_x_, other->bullet_x_);
+  std::swap(bullet_y_, other->bullet_y_);
+  std::swap(bullet_life_, other->bullet_life_);
+  std::swap(bullet_dir_, other->bullet_dir_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
@@ -1054,6 +1202,102 @@ void Player::set_size_y(float value) {
   set_has_size_y();
   size_y_ = value;
   // @@protoc_insertion_point(field_set:Player.size_y)
+}
+
+// optional float bullet_x = 11;
+bool Player::has_bullet_x() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+void Player::set_has_bullet_x() {
+  _has_bits_[0] |= 0x00000400u;
+}
+void Player::clear_has_bullet_x() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+void Player::clear_bullet_x() {
+  bullet_x_ = 0;
+  clear_has_bullet_x();
+}
+float Player::bullet_x() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_x)
+  return bullet_x_;
+}
+void Player::set_bullet_x(float value) {
+  set_has_bullet_x();
+  bullet_x_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_x)
+}
+
+// optional float bullet_y = 12;
+bool Player::has_bullet_y() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+void Player::set_has_bullet_y() {
+  _has_bits_[0] |= 0x00000800u;
+}
+void Player::clear_has_bullet_y() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+void Player::clear_bullet_y() {
+  bullet_y_ = 0;
+  clear_has_bullet_y();
+}
+float Player::bullet_y() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_y)
+  return bullet_y_;
+}
+void Player::set_bullet_y(float value) {
+  set_has_bullet_y();
+  bullet_y_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_y)
+}
+
+// optional bool bullet_life = 13;
+bool Player::has_bullet_life() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+void Player::set_has_bullet_life() {
+  _has_bits_[0] |= 0x00001000u;
+}
+void Player::clear_has_bullet_life() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+void Player::clear_bullet_life() {
+  bullet_life_ = false;
+  clear_has_bullet_life();
+}
+bool Player::bullet_life() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_life)
+  return bullet_life_;
+}
+void Player::set_bullet_life(bool value) {
+  set_has_bullet_life();
+  bullet_life_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_life)
+}
+
+// optional int32 bullet_dir = 14;
+bool Player::has_bullet_dir() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+void Player::set_has_bullet_dir() {
+  _has_bits_[0] |= 0x00002000u;
+}
+void Player::clear_has_bullet_dir() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+void Player::clear_bullet_dir() {
+  bullet_dir_ = 0;
+  clear_has_bullet_dir();
+}
+::google::protobuf::int32 Player::bullet_dir() const {
+  // @@protoc_insertion_point(field_get:Player.bullet_dir)
+  return bullet_dir_;
+}
+void Player::set_bullet_dir(::google::protobuf::int32 value) {
+  set_has_bullet_dir();
+  bullet_dir_ = value;
+  // @@protoc_insertion_point(field_set:Player.bullet_dir)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
